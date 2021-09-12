@@ -21,6 +21,13 @@ iretq
 long32:
 bits 32
 
+mov ax, gdt32.data
+mov ds, ax
+mov es, ax
+mov fs, ax
+mov gs, ax
+mov ss, ax
+
 ; CR0.PG <- 0
 mov eax, cr0
 and eax, ~(1 << 31)
@@ -91,7 +98,7 @@ gdt32:
 	dw 0x0000    ; base 0-15
 	db 0         ; base 16-23
 	db 10011010b ; Pr | Privl(2) | S | Ex | DC | RW | Ac
-	db 11001111b ; Gr | Sz | 0 | 0 | limit 16-19
+	db 11001111b ; Gr | Sz | L | 0 | limit 16-19
 	db 0
 .code16: equ $ - gdt32
 	dw 0xffff    ; limit 0-15
@@ -105,7 +112,7 @@ gdt32:
 	dw 0x0000    ; base 0-15
 	db 0         ; base 16-23
 	db 10010010b ; Pr | Privl(2) | S | Ex | DC | RW | Ac
-	db 11001111b ; Gr | Sz | 0 | 0 | limit 16-19
+	db 11001111b ; Gr | Sz | L | 0 | limit 16-19
 	db 0
 .data16: equ $ - gdt32
 	dw 0xffff    ; limit 0-15
