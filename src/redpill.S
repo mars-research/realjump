@@ -1,10 +1,15 @@
-; Self-contained code that tears down long mode and jumps to 0x7c00.
+; Self-contained code that tears down long mode and jumps to some address.
 ;
 ; Reference: Figure 1-6, AMD64 Architecture Programmer's Manual Vol. 2
 ; <https://www.amd.com/system/files/TechDocs/24593.pdf>
 
 bits 64
 org 0x500
+
+; 16-bit address to jump to
+dw 0
+
+; This is 0x502
 
 ; Load our tiny GDT
 lgdt [gdt32.pointer]
@@ -82,12 +87,54 @@ mov gs, ax
 mov ss, ax
 mov sp, 0x2000
 
+; Return PIC to the original state
+; (mask nothing, vector offset = 0x8 and 0x70 respectively)
+%define PIC1 0x20
+%define PIC1_DATA 0x21
+%define PIC2 0xa0
+%define PIC2_DATA 0xa1
+
+%macro wait_pic 0
+	xor al, al
+	out 0x80, al
+%endmacro
+
+%macro outb_pic 2
+	mov al, %2
+	out %1, al
+	wait_pic
+%endmacro
+
+; ICW1: initialization
+; We will set ICW4
+outb_pic PIC1, (0x10 | 0x01)
+outb_pic PIC2, (0x10 | 0x01)
+
+; ICW2: offsets
+outb_pic PIC1_DATA, 0x8
+outb_pic PIC2_DATA, 0x70
+
+; ICW3: cascading
+outb_pic PIC1_DATA, 0x4
+outb_pic PIC2_DATA, 0x2
+
+; ICW4: modes
+outb_pic PIC1_DATA, 0x1
+outb_pic PIC2_DATA, 0x1
+
+; OCW1: masks
+; The default is to mask nothing
+outb_pic PIC1_DATA, 0x0
+outb_pic PIC2_DATA, 0x0
+
 lidt [idt16_pointer]
 sti
 
+; Reset video mode
+mov al, 0x2 ; 80x24 gray
 int 10h
 
-jmp 0:0x7c00
+jmp [0x500]
 
 hlt
 
