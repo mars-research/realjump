@@ -14,3 +14,8 @@ It's mostly useful for quickly getting back to Linux from your OS because the bo
 1. Halt all other processors.
 1. Call `realjump::boot(your_mbr_slice, 0x7c00).unwrap()`.
 1. `realjump` will take care of the rest. It will load its own GDT and take the system all the way back to Real Mode.
+
+## INT 13h
+
+Certain BIOS services, like INT 13h, may no longer function when you return to Real Mode.
+For GRUB2, you can work around this by loading the `core.img` directly with `realjump::boot_grub2`.
