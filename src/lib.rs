@@ -25,6 +25,7 @@ const BOOTSTRAP_CODE_DEST: u16 = 0x500;
 
 /// An error.
 #[derive(Debug)]
+#[non_exhaustive]
 pub enum Error {
     /// The payload is too large.
     PayloadTooLarge,
