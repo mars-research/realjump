@@ -1,5 +1,7 @@
 # realjump
 
+[![Build](https://github.com/mars-research/realjump/actions/workflows/build.yml/badge.svg)](https://github.com/mars-research/realjump/actions/workflows/build.yml)
+
 `realjump` is a tiny `#![no_std]` crate that loads and boots Real Mode code (MBR, GRUB2, etc.) from your x86-64 kernel.
 It puts the system from Long Mode back to Real Mode and jumps to the code.
 

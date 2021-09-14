@@ -1,7 +1,12 @@
 [package]
 name = "realjump"
+description = "Tiny crate that loads and boots Real Mode code from an x86-64 kernel"
 version = "0.1.0"
+authors = ["Zhaofeng Li <hello@zhaofeng.li>"]
+license = "MIT"
 edition = "2018"
+
+repository = "https://github.com/mars-research/realjump"
 
 [dependencies]
 
