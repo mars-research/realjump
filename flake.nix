@@ -23,7 +23,7 @@
       nativeBuildInputs = with pkgs; [
         rustNightly
 
-        nasm
+        qemu nasm
       ];
     };
   });
