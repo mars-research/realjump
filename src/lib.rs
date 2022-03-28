@@ -24,9 +24,9 @@
 
 #![no_std]
 
-#![feature(asm)]
 #![deny(missing_docs)]
 
+use core::arch::asm;
 use core::result::Result;
 use core::ptr::{copy, write_volatile};
 

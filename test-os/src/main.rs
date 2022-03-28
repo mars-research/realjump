@@ -1,6 +1,7 @@
 #![no_std]
-#![feature(asm, start)]
+#![feature(start)]
 
+use core::arch::asm;
 use core::panic::PanicInfo;
 
 #[start]
